@@ -25,3 +25,14 @@ Route::resource('sessions', SessionController::class);
 Route::resource('attendances', AttendanceController::class);
 Route::resource('accounts', AccountController::class);
 Route::resource('account-sessions', AccountSessionController::class);
+
+// get students in class
+Route::get('/classes/{classId}/students', [ClassStudentController::class, 'studentsInClass']);
+// get class un open with student's department
+Route::get('/classes/unopened',  [ClassController::class, 'getUnopenedClasses']);
+// approve student to class
+Route::post('/teachers/approve-student/{classRegistrationId}/{studentId}', [TeacherController::class, 'approveStudent']);
+// sumary student in session
+Route::get('/sessions/{sessionId}/attendance/count', [SessionController::class, 'attendanceCount']);
+// check status student in session
+Route::post('/attendances/get-by-student-session', [AttendanceController::class, 'getByStudentAndSession']);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ClassModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ClassController extends Controller
 {
@@ -25,7 +26,7 @@ class ClassController extends Controller
             'departmentId' => 'required|exists:departments,id',
         ]);
 
-        $class = ClassModel::create($validatedData);
+        $class = ClassModel::create(array_merge($validatedData, ['status' => 'Chờ duyệt']));
         return response()->json($class, 201);
     }
 
@@ -38,14 +39,7 @@ class ClassController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'name' => 'required',
-            'teacherId' => 'required|exists:teachers,id',
-            'courseName' => 'required',
-            'startDate' => 'required|date',
-            'endDate' => 'required|date|after_or_equal:startDate',
             'status' => 'required',
-            'numberOfSession' => 'required|integer|min:1',
-            'departmentId' => 'required|exists:departments,id',
         ]);
 
         $class = ClassModel::findOrFail($id);
@@ -58,5 +52,17 @@ class ClassController extends Controller
         $class = ClassModel::findOrFail($id);
         $class->delete();
         return response()->json(null, 204);
+    }
+
+    public function getUnopenedClassesByDepartment()
+    {
+        $student = Auth::user();
+        $departmentId = $student->departmentId;
+
+        $unopenedClasses = ClassModel::where('status', 'chưa mở')
+            ->where('departmentId', $departmentId)
+            ->get();
+
+        return response()->json($unopenedClasses);
     }
 }

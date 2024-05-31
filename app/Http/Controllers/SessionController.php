@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attendance;
+use App\Models\ClassModel;
 use App\Models\Session;
 use Illuminate\Http\Request;
 
@@ -19,6 +21,12 @@ class SessionController extends Controller
             'sessionDate' => 'required|date',
             'sessionLocation' => 'required',
         ]);
+
+        $class = ClassModel::findOrFail($validatedData['classId']);
+
+        if ($class->status !== 'đã duyệt') {
+            return response()->json(['error' => 'Không thể tạo session cho lớp học chưa được duyệt.'], 403);
+        }
 
         $session = Session::create($validatedData);
         return response()->json($session, 201);
@@ -48,5 +56,15 @@ class SessionController extends Controller
         $session = Session::findOrFail($id);
         $session->delete();
         return response()->json(null, 204);
+    }
+
+    public function attendanceCount($sessionId)
+    {
+        $session = Session::findOrFail($sessionId);
+
+        // Đếm số lượng attendance cho session
+        $attendanceCount = Attendance::where('sessionId', $session->id)->count();
+
+        return response()->json(['attendance_count' => $attendanceCount]);
     }
 }

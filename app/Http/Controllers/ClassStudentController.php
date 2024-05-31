@@ -32,10 +32,9 @@ class ClassStudentController extends Controller
 
     public function update(Request $request, $id)
     {
+
         $validatedData = $request->validate([
-            'studentId' => 'required|exists:students,id',
-            'classId' => 'required|exists:classes,id',
-            'score' => 'required|numeric|min:0|max:100',
+            'score' => 'required',
         ]);
 
         $classStudent = ClassStudent::findOrFail($id);
@@ -48,5 +47,14 @@ class ClassStudentController extends Controller
         $classStudent = ClassStudent::findOrFail($id);
         $classStudent->delete();
         return response()->json(null, 204);
+    }
+
+    public function studentsInClass($classId)
+    {
+        $students = ClassStudent::where('classId', $classId)
+            ->with('student')
+            ->get();
+
+        return response()->json($students);
     }
 }
