@@ -137,6 +137,9 @@ return new class extends Migration
         Schema::dropIfExists('AccountSession');
         Schema::dropIfExists('User');
         Schema::dropIfExists('Department');
+        Schema::dropIfExists('Teacher');
+        Schema::dropIfExists('Student');
+        Schema::dropIfExists('Class');
         Schema::dropIfExists('ClassRegistration');
         Schema::dropIfExists('ClassStudent');
         Schema::dropIfExists('Session');
