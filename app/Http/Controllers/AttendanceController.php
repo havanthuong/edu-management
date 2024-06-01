@@ -25,7 +25,7 @@ class AttendanceController extends Controller
             ->first();
 
         if ($existingAttendance) {
-            return response()->json(['error' => 'Attendance for this student and session already exists.'], 422);
+            return response()->json(['error' => 'Attendance for this student and session already exists.'], 422)->header('Content-Type', 'text/plain');
         }
 
         $attendance = Attendance::create($validatedData);

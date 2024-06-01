@@ -15,7 +15,7 @@ class AccountSessionController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'accountId' => 'required|exists:accounts,id',
+            'accountId' => 'required|exists:Account,id',
         ]);
 
         $accountSession = AccountSession::create($validatedData);
@@ -31,7 +31,7 @@ class AccountSessionController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'accountId' => 'required|exists:accounts,id',
+            'accountId' => 'required|exists:Account,id',
         ]);
 
         $accountSession = AccountSession::findOrFail($id);

@@ -58,7 +58,7 @@ class TeacherController extends Controller
 
         // Kiểm tra xem bản ghi ClassRegistration tồn tại và có thuộc lớp của giáo viên không
         if (!$classRegistration || $classRegistration->class->teacherId !== $teacher->id) {
-            return response()->json(['error' => 'Không thể duyệt sinh viên này.'], 403);
+            return response()->json(['error' => 'Không thể duyệt sinh viên này.'], 403)->header('Content-Type', 'text/plain');
         }
 
         // Thêm sinh viên vào bảng ClassStudent

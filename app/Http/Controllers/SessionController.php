@@ -25,7 +25,7 @@ class SessionController extends Controller
         $class = ClassModel::findOrFail($validatedData['classId']);
 
         if ($class->status !== 'đã duyệt') {
-            return response()->json(['error' => 'Không thể tạo session cho lớp học chưa được duyệt.'], 403);
+            return response()->json(['error' => 'Không thể tạo session cho lớp học chưa được duyệt.'], 403)->header('Content-Type', 'text/plain');
         }
 
         $session = Session::create($validatedData);

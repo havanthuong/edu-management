@@ -15,7 +15,7 @@ class AccountController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'userName' => 'required|unique:accounts',
+            'userName' => 'required|unique:Account',
             'password' => 'required',
             'role' => 'required',
         ]);
@@ -33,7 +33,7 @@ class AccountController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'userName' => 'required|unique:accounts,userName,' . $id,
+            'userName' => 'required|unique:Account,userName,' . $id,
             'password' => 'required',
             'role' => 'required',
         ]);
