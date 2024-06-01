@@ -30,24 +30,21 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::apiResource('students', StudentController::class);
     Route::apiResource('teachers', TeacherController::class);
     Route::apiResource('users', TeacherController::class);
+
+    // start session
+    Route::post('start-session/{sessionId}', [SessionController::class, 'startSession']);
+
+    // get students in class
+    Route::get('classes/{classId}/students', [ClassStudentController::class, 'studentsInClass']);
+    // get class un-open with student's department
+    Route::get('classes/unopened',  [ClassController::class, 'getUnopenedClasses']);
+    // approve student to class
+    Route::post('teachers/approve-student/{classRegistrationId}/{studentId}', [TeacherController::class, 'approveStudent']);
+    // check status student in session
+    Route::get('attendances/get-by-student-session', [AttendanceController::class, 'getByStudentAndSession']);
+
+    // summary sesions of student in class
+    Route::get('student/{studentId}/class/{classId}/count', [StudentController::class, 'sessionCount']);
+    // summary students in session
+    Route::get('sessions/{sessionId}/attendance/count', [SessionController::class, 'attendanceCount']);
 });
-
-// create account
-Route::get('/create-account', [AccountController::class, 'createAccount'])->middleware('auth.jwt');
-// start session
-Route::get('/start-session', [SessionController::class, 'startSession'])->middleware('auth.jwt');
-
-// get students in class
-Route::get('/classes/{classId}/students', [ClassStudentController::class, 'studentsInClass'])->middleware('auth.jwt');
-// get class un-open with student's department
-Route::get('/classes/unopened',  [ClassController::class, 'getUnopenedClasses'])->middleware('auth.jwt');
-// approve student to class
-Route::post('/teachers/approve-student/{classRegistrationId}/{studentId}', [TeacherController::class, 'approveStudent'])->middleware('auth.jwt');
-// check status student in session
-Route::post('/attendances/get-by-student-session', [AttendanceController::class, 'getByStudentAndSession'])->middleware('auth.jwt');
-
-// summary
-// summary sesions of student in class
-Route::get('/student/{studentId}/class/{classId}/count', [StudentController::class, 'sessionCount'])->middleware('auth.jwt');
-// summary students in session
-Route::get('/sessions/{sessionId}/attendance/count', [SessionController::class, 'attendanceCount'])->middleware('auth.jwt');

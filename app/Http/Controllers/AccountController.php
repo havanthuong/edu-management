@@ -18,45 +18,6 @@ class AccountController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'userName' => 'required|unique:Account',
-            'password' => 'required',
-            'role' => 'required',
-        ]);
-
-        $account = Account::create($validatedData);
-        return response()->json($account, 201);
-    }
-
-    public function show($id)
-    {
-        $account = Account::findOrFail($id);
-        return response()->json($account);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $validatedData = $request->validate([
-            'userName' => 'required|unique:Account,userName,' . $id,
-            'password' => 'required',
-            'role' => 'required',
-        ]);
-
-        $account = Account::findOrFail($id);
-        $account->update($validatedData);
-        return response()->json($account);
-    }
-
-    public function destroy($id)
-    {
-        $account = Account::findOrFail($id);
-        $account->delete();
-        return response()->json(null, 204);
-    }
-
-    public function createAccount(Request $request,)
-    {
-
         $currentAccount = auth()->user();
 
         if (!$currentAccount || $currentAccount->role !== 3) {
@@ -111,12 +72,17 @@ class AccountController extends Controller
         return response()->json(['message' => 'Account created successfully'], 201);
     }
 
-    public function updateAccount(Request $request,)
+    public function show($id)
     {
+        $account = Account::findOrFail($id);
+        return response()->json($account);
+    }
 
+    public function update(Request $request, $id)
+    {
         $currentAccount = auth()->user();
 
-        if (!$currentAccount || $currentAccount->role !== 3) {
+        if (!$currentAccount || $currentAccount->role === 1) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -128,40 +94,23 @@ class AccountController extends Controller
             'departmentId' => 'required|exists:Department,id',
         ]);
 
-        if (Account::where('userName', $validatedData['username'])->exists()) {
-            return response()->json(['error' => 'Username already exists'], 400);
-        }
+        $account = Account::findOrFail($id);
+        $user = User::where('accountId', $account->id)->firstOrFail();
 
-        if (User::where('email', $validatedData['email'])->exists()) {
-            return response()->json(['error' => 'Email already exists'], 400);
-        }
+        $user->name = $validatedData['name'];
+        $user->email = $validatedData['email'];
+        $user->gender = $validatedData['gender'];
+        $user->address = $validatedData['address'];
+        $user->departmentId = $validatedData['departmentId'];
+        $user->save();
 
-        $account = Account::create([
-            'userName' => $validatedData['username'],
-            'password' => Hash::make($validatedData['password']),
-            'role' => $validatedData['role'],
-        ]);
+        return response()->json(['message' => 'Account update successfully'], 201);
+    }
 
-        $user = User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'gender' => $validatedData['gender'],
-            'address' => $validatedData['address'],
-            'accountId' => $account->id,
-        ]);
-
-        if ($validatedData['role'] == 1) {
-            Student::create([
-                'userId' => $user->id,
-                'departmentId' => $validatedData['departmentId'],
-            ]);
-        } elseif ($validatedData['role'] == 2) {
-            Teacher::create([
-                'userId' => $user->id,
-                'departmentId' => $validatedData['departmentId'],
-            ]);
-        }
-
-        return response()->json(['message' => 'Account created successfully'], 201);
+    public function destroy($id)
+    {
+        $account = Account::findOrFail($id);
+        $account->delete();
+        return response()->json(null, 204);
     }
 }

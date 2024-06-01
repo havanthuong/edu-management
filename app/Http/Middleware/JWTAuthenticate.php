@@ -28,7 +28,7 @@ class JWTAuthenticate
         // Kiểm tra thời gian tạo session cuối cùng
         $lastSession = AccountSession::where('accountId', $user->id)->orderBy('created_at', 'desc')->first();
 
-        if (!$lastSession || Carbon::now()->diffInMinutes($lastSession->created_at) > 10) {
+        if (!$lastSession || Carbon::now()->diffInHours($lastSession->created_at) > 24) {
             return response()->json(['error' => 'Token expired'], 401);
         }
 
