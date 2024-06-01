@@ -27,7 +27,7 @@ class ClassController extends Controller
         ]);
 
         $class = ClassModel::create(array_merge($validatedData, ['status' => 'Unpprove']));
-        return response()->json($class, 201)->header('Content-Type', 'text/plain');
+        return response()->json($class, 201);
     }
 
     public function show($id)

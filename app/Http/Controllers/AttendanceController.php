@@ -25,11 +25,11 @@ class AttendanceController extends Controller
             ->first();
 
         if ($existingAttendance) {
-            return response()->json(['error' => 'Attendance for this student and session already exists.'], 422)->header('Content-Type', 'text/plain');
+            return response()->json(['error' => 'Attendance for this student and session already exists.'], 422);
         }
 
         $attendance = Attendance::create($validatedData);
-        return response()->json($attendance, 201)->header('Content-Type', 'text/plain');
+        return response()->json($attendance, 201);
     }
 
     public function show($id)
@@ -54,7 +54,7 @@ class AttendanceController extends Controller
     {
         $attendance = Attendance::findOrFail($id);
         $attendance->delete();
-        return response()->json(null, 204)->header('Content-Type', 'text/plain');
+        return response()->json(null, 204);
     }
 
     public function getByStudentAndSession(Request $request)

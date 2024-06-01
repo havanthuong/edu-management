@@ -23,7 +23,7 @@ class TeacherController extends Controller
         ]);
 
         $teacher = Teacher::create($validatedData);
-        return response()->json($teacher, 201)->header('Content-Type', 'text/plain');
+        return response()->json($teacher, 201);
     }
 
     public function show($id)
@@ -48,7 +48,7 @@ class TeacherController extends Controller
     {
         $teacher = Teacher::findOrFail($id);
         $teacher->delete();
-        return response()->json(null, 204)->header('Content-Type', 'text/plain');
+        return response()->json(null, 204);
     }
 
     public function approveStudent($classRegistrationId, $studentId)
@@ -58,7 +58,7 @@ class TeacherController extends Controller
 
         // Kiểm tra xem bản ghi ClassRegistration tồn tại và có thuộc lớp của giáo viên không
         if (!$classRegistration || $classRegistration->class->teacherId !== $teacher->id) {
-            return response()->json(['error' => 'Không thể duyệt sinh viên này.'], 403)->header('Content-Type', 'text/plain');
+            return response()->json(['error' => 'Không thể duyệt sinh viên này.'], 403);
         }
 
         // Thêm sinh viên vào bảng ClassStudent

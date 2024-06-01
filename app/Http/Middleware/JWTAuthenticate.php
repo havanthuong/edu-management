@@ -18,18 +18,18 @@ class JWTAuthenticate
         try {
             $user = JWTAuth::parseToken()->authenticate();
         } catch (JWTException $e) {
-            return response()->json(['error' => 'Unauthorized'], 401)->header('Content-Type', 'text/plain');
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         if (!$user) {
-            return response()->json(['error' => 'User not found'], 404)->header('Content-Type', 'text/plain');
+            return response()->json(['error' => 'User not found'], 404);
         }
 
         // Kiểm tra thời gian tạo session cuối cùng
         $lastSession = AccountSession::where('accountId', $user->id)->orderBy('created_at', 'desc')->first();
 
         if (!$lastSession || Carbon::now()->diffInMinutes($lastSession->created_at) > 10) {
-            return response()->json(['error' => 'Token expired'], 401)->header('Content-Type', 'text/plain');
+            return response()->json(['error' => 'Token expired'], 401);
         }
 
         return $next($request);

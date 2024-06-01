@@ -19,7 +19,7 @@ class DepartmentController extends Controller
         ]);
 
         $department = Department::create($validatedData);
-        return response()->json($department, 201)->header('Content-Type', 'text/plain');
+        return response()->json($department, 201);
     }
 
     public function show($id)
@@ -43,6 +43,6 @@ class DepartmentController extends Controller
     {
         $department = Department::findOrFail($id);
         $department->delete();
-        return response()->json(null, 204)->header('Content-Type', 'text/plain');
+        return response()->json(null, 204);
     }
 }

@@ -18,7 +18,7 @@ class JWTRefreshToken
                 $response->headers->set('Authorization', 'Bearer ' . $token);
             }
         } catch (JWTException $e) {
-            return response()->json(['message' => 'Could not refresh token'], 500)->header('Content-Type', 'text/plain');
+            return response()->json(['message' => 'Could not refresh token'], 500);
         }
 
         return $response;

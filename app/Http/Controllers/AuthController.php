@@ -15,7 +15,7 @@ class AuthController extends Controller
         $credentials = $request->only('userName', 'password');
 
         if (!$token = JWTAuth::attempt($credentials)) {
-            return response()->json(['error' => 'Invalid credentials'], 400)->header('Content-Type', 'text/plain');
+            return response()->json(['error' => 'Invalid credentials'], 400);
         }
 
         $account = Auth::user();
@@ -35,7 +35,7 @@ class AuthController extends Controller
             JWTAuth::invalidate(JWTAuth::getToken());
             return response()->json(['success' => 'User logged out successfully']);
         } catch (JWTException $e) {
-            return response()->json(['error' => 'Failed to logout, please try again'], 500)->header('Content-Type', 'text/plain');
+            return response()->json(['error' => 'Failed to logout, please try again'], 500);
         }
     }
 

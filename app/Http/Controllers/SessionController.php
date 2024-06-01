@@ -26,11 +26,11 @@ class SessionController extends Controller
         $class = ClassModel::findOrFail($validatedData['classId']);
 
         if ($class->status !== 'đã duyệt') {
-            return response()->json(['error' => 'Không thể tạo session cho lớp học chưa được duyệt.'], 403)->header('Content-Type', 'text/plain');
+            return response()->json(['error' => 'Không thể tạo session cho lớp học chưa được duyệt.'], 403);
         }
 
         $session = Session::create($validatedData);
-        return response()->json($session, 201)->header('Content-Type', 'text/plain');
+        return response()->json($session, 201);
     }
 
     public function show($id)
@@ -56,7 +56,7 @@ class SessionController extends Controller
     {
         $session = Session::findOrFail($id);
         $session->delete();
-        return response()->json(null, 204)->header('Content-Type', 'text/plain');
+        return response()->json(null, 204);
     }
 
     public function attendanceCount($sessionId)
@@ -74,7 +74,7 @@ class SessionController extends Controller
         $session = Session::findOrFail($sessionId);
 
         if (!$session) {
-            return response()->json(['error' => 'Session not found'], 404)->header('Content-Type', 'text/plain');
+            return response()->json(['error' => 'Session not found'], 404);
         }
 
 
@@ -93,6 +93,6 @@ class SessionController extends Controller
             ]);
         }
 
-        return response()->json(['message' => 'Bắt đầu buổi học thành công.'], 201)->header('Content-Type', 'text/plain');
+        return response()->json(['message' => 'Bắt đầu buổi học thành công.'], 201);
     }
 }

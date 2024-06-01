@@ -21,7 +21,7 @@ class ClassStudentController extends Controller
         ]);
 
         $classStudent = ClassStudent::create($validatedData);
-        return response()->json($classStudent, 201)->header('Content-Type', 'text/plain');
+        return response()->json($classStudent, 201);
     }
 
     public function show($id)
@@ -46,7 +46,7 @@ class ClassStudentController extends Controller
     {
         $classStudent = ClassStudent::findOrFail($id);
         $classStudent->delete();
-        return response()->json(null, 204)->header('Content-Type', 'text/plain');
+        return response()->json(null, 204);
     }
 
     public function studentsInClass($classId)

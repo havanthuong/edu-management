@@ -20,7 +20,7 @@ class ClassRegistrationController extends Controller
         ]);
 
         $registration = ClassRegistration::create($validatedData);
-        return response()->json($registration, 201)->header('Content-Type', 'text/plain');
+        return response()->json($registration, 201);
     }
 
     public function show($id)
@@ -45,6 +45,6 @@ class ClassRegistrationController extends Controller
     {
         $registration = ClassRegistration::findOrFail($id);
         $registration->delete();
-        return response()->json(null, 204)->header('Content-Type', 'text/plain');
+        return response()->json(null, 204);
     }
 }

@@ -23,7 +23,7 @@ class UserController extends Controller
         ]);
 
         $user = User::create($validatedData);
-        return response()->json($user, 201)->header('Content-Type', 'text/plain');
+        return response()->json($user, 201);
     }
 
     public function show($id)
@@ -51,6 +51,6 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
-        return response()->json(null, 204)->header('Content-Type', 'text/plain');
+        return response()->json(null, 204);
     }
 }

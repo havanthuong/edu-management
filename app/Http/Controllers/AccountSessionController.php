@@ -19,7 +19,7 @@ class AccountSessionController extends Controller
         ]);
 
         $accountSession = AccountSession::create($validatedData);
-        return response()->json($accountSession, 201)->header('Content-Type', 'text/plain');
+        return response()->json($accountSession, 201);
     }
 
     public function show($id)
@@ -43,6 +43,6 @@ class AccountSessionController extends Controller
     {
         $accountSession = AccountSession::findOrFail($id);
         $accountSession->delete();
-        return response()->json(null, 204)->header('Content-Type', 'text/plain');
+        return response()->json(null, 204);
     }
 }
