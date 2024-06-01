@@ -15,13 +15,13 @@ class ClassStudentController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'studentId' => 'required|exists:students,id',
-            'classId' => 'required|exists:classes,id',
+            'studentId' => 'required|exists:Student,id',
+            'classId' => 'required|exists:Class,id',
             'score' => 'required|numeric|min:0|max:100',
         ]);
 
         $classStudent = ClassStudent::create($validatedData);
-        return response()->json($classStudent, 201);
+        return response()->json($classStudent, 201)->header('Content-Type', 'text/plain');
     }
 
     public function show($id)
@@ -46,7 +46,7 @@ class ClassStudentController extends Controller
     {
         $classStudent = ClassStudent::findOrFail($id);
         $classStudent->delete();
-        return response()->json(null, 204);
+        return response()->json(null, 204)->header('Content-Type', 'text/plain');
     }
 
     public function studentsInClass($classId)

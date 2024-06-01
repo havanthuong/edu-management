@@ -23,7 +23,7 @@ class TeacherController extends Controller
         ]);
 
         $teacher = Teacher::create($validatedData);
-        return response()->json($teacher, 201);
+        return response()->json($teacher, 201)->header('Content-Type', 'text/plain');
     }
 
     public function show($id)
@@ -48,7 +48,7 @@ class TeacherController extends Controller
     {
         $teacher = Teacher::findOrFail($id);
         $teacher->delete();
-        return response()->json(null, 204);
+        return response()->json(null, 204)->header('Content-Type', 'text/plain');
     }
 
     public function approveStudent($classRegistrationId, $studentId)

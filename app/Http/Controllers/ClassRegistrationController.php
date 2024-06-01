@@ -15,12 +15,12 @@ class ClassRegistrationController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'studentId' => 'required|exists:students,id',
-            'classId' => 'required|exists:classes,id',
+            'studentId' => 'required|exists:Student,id',
+            'classId' => 'required|exists:Class,id',
         ]);
 
         $registration = ClassRegistration::create($validatedData);
-        return response()->json($registration, 201);
+        return response()->json($registration, 201)->header('Content-Type', 'text/plain');
     }
 
     public function show($id)
@@ -32,8 +32,8 @@ class ClassRegistrationController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'studentId' => 'required|exists:students,id',
-            'classId' => 'required|exists:classes,id',
+            'studentId' => 'required|exists:Student,id',
+            'classId' => 'required|exists:Class,id',
         ]);
 
         $registration = ClassRegistration::findOrFail($id);
@@ -45,6 +45,6 @@ class ClassRegistrationController extends Controller
     {
         $registration = ClassRegistration::findOrFail($id);
         $registration->delete();
-        return response()->json(null, 204);
+        return response()->json(null, 204)->header('Content-Type', 'text/plain');
     }
 }

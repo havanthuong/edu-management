@@ -16,14 +16,14 @@ class UserController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|unique:User',
             'gender' => 'required',
             'address' => 'required',
             'accountId' => 'required|exists:Account,id',
         ]);
 
         $user = User::create($validatedData);
-        return response()->json($user, 201);
+        return response()->json($user, 201)->header('Content-Type', 'text/plain');
     }
 
     public function show($id)
@@ -36,7 +36,7 @@ class UserController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $id,
+            'email' => 'required|email|unique:User,email,' . $id,
             'gender' => 'required',
             'address' => 'required',
             'accountId' => 'required|exists:Account,id',
@@ -51,6 +51,6 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
-        return response()->json(null, 204);
+        return response()->json(null, 204)->header('Content-Type', 'text/plain');
     }
 }

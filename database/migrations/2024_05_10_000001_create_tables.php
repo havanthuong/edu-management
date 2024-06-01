@@ -109,13 +109,12 @@ return new class extends Migration
             $table->unsignedBigInteger('classId');
             $table->dateTime('sesionDate');
             $table->string('sesionLocation');
-            $table->dateTime('studentId');
             $table->timestamps();
 
             $table->foreign('classId')->references('id')->on('Class')->onDelete('cascade');
         });
 
-        Schema::create('Attendence', function (Blueprint $table) {
+        Schema::create('Attendance', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('studentId');
             $table->unsignedBigInteger('sessionId');
@@ -143,6 +142,6 @@ return new class extends Migration
         Schema::dropIfExists('ClassRegistration');
         Schema::dropIfExists('ClassStudent');
         Schema::dropIfExists('Session');
-        Schema::dropIfExists('Attendence');
+        Schema::dropIfExists('Attendance');
     }
 };

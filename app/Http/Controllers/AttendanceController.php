@@ -15,13 +15,13 @@ class AttendanceController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'studentId' => 'required|exists:students,id',
-            'sessionId' => 'required|exists:sessions,id',
+            'studentId' => 'required|exists:Student,id',
+            'sessionId' => 'required|exists:Session,id',
             'status' => 'required|in:-1,0,1',
         ]);
 
-        $existingAttendance = Attendance::where('student_id', $validatedData['student_id'])
-            ->where('session_id', $validatedData['session_id'])
+        $existingAttendance = Attendance::where('studentId', $validatedData['studentId'])
+            ->where('sessionId', $validatedData['sessionId'])
             ->first();
 
         if ($existingAttendance) {
@@ -29,7 +29,7 @@ class AttendanceController extends Controller
         }
 
         $attendance = Attendance::create($validatedData);
-        return response()->json($attendance, 201);
+        return response()->json($attendance, 201)->header('Content-Type', 'text/plain');
     }
 
     public function show($id)
@@ -41,8 +41,8 @@ class AttendanceController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'studentId' => 'required|exists:students,id',
-            'sessionId' => 'required|exists:sessions,id',
+            'studentId' => 'required|exists:Student,id',
+            'sessionId' => 'required|exists:Session,id',
         ]);
 
         $attendance = Attendance::findOrFail($id);
@@ -54,24 +54,24 @@ class AttendanceController extends Controller
     {
         $attendance = Attendance::findOrFail($id);
         $attendance->delete();
-        return response()->json(null, 204);
+        return response()->json(null, 204)->header('Content-Type', 'text/plain');
     }
 
     public function getByStudentAndSession(Request $request)
     {
         $validatedData = $request->validate([
-            'student_id' => 'required|exists:students,id',
-            'session_id' => 'required|exists:sessions,id',
+            'studentId' => 'required|exists:Student,id',
+            'sessionId' => 'required|exists:Session,id',
         ]);
 
-        $attendance = Attendance::where('student_id', $validatedData['student_id'])
-            ->where('session_id', $validatedData['session_id'])
+        $attendance = Attendance::where('studentId', $validatedData['studentId'])
+            ->where('sessionId', $validatedData['sessionId'])
             ->first();
 
         if (!$attendance) {
             $attendance = Attendance::create([
-                'student_id' => $validatedData['student_id'],
-                'session_id' => $validatedData['session_id'],
+                'studentId' => $validatedData['studentId'],
+                'sessionId' => $validatedData['sessionId'],
                 'status' => -1,
             ]);
         }

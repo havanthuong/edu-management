@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('Attendence', function (Blueprint $table) {
+        Schema::table('Attendance', function (Blueprint $table) {
             $table->tinyInteger('status')->default(-1)->comment('-1: Chưa điểm danh, 0: Vắng, 1: Có mặt');
         });
     }
@@ -25,7 +25,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('Attendence', function (Blueprint $table) {
+        Schema::table('Attendance', function (Blueprint $table) {
             $table->dropColumn('status');
         });
     }

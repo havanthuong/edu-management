@@ -15,7 +15,6 @@ class Session extends Model
         'classId',
         'sesionDate',
         'sesionLocation',
-        'studentId',
     ];
 
     public function class()

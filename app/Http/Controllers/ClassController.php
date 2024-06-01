@@ -17,17 +17,17 @@ class ClassController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required',
-            'teacherId' => 'required|exists:teachers,id',
+            'teacherId' => 'required|exists:Teacher,id',
             'courseName' => 'required',
             'startDate' => 'required|date',
             'endDate' => 'required|date|after_or_equal:startDate',
-            'status' => 'required',
+            'status' => 'required', // Unpprove, Unopen, Open, Finish
             'numberOfSession' => 'required|integer|min:1',
-            'departmentId' => 'required|exists:departments,id',
+            'departmentId' => 'required|exists:Department,id',
         ]);
 
-        $class = ClassModel::create(array_merge($validatedData, ['status' => 'Chờ duyệt']));
-        return response()->json($class, 201);
+        $class = ClassModel::create(array_merge($validatedData, ['status' => 'Unpprove']));
+        return response()->json($class, 201)->header('Content-Type', 'text/plain');
     }
 
     public function show($id)
@@ -59,7 +59,7 @@ class ClassController extends Controller
         $student = Auth::user();
         $departmentId = $student->departmentId;
 
-        $unopenedClasses = ClassModel::where('status', 'chưa mở')
+        $unopenedClasses = ClassModel::where('status', 'Unopen')
             ->where('departmentId', $departmentId)
             ->get();
 
