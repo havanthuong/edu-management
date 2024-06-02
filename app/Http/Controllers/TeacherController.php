@@ -54,16 +54,16 @@ class TeacherController extends Controller
 
     public function approveStudent($classRegistrationId, $studentId)
     {
-        $teacher = Auth::user();
         $classRegistration = ClassRegistration::find($classRegistrationId);
 
-        if (!$classRegistration || $classRegistration->class->teacherId !== $teacher->id) {
+        if (!$classRegistration) {
             return response()->json(['error' => 'Không thể duyệt sinh viên này.'], 403);
         }
 
         $classStudent = new ClassStudent();
         $classStudent->studentId = $studentId;
         $classStudent->classId = $classRegistration->classId;
+        $classStudent->score = 0;
         $classStudent->save();
 
         $classRegistration->delete();

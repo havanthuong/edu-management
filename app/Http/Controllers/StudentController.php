@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\ClassModel;
+use App\Models\ClassStudent;
 use App\Models\Session;
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -74,5 +76,23 @@ class StudentController extends Controller
             'sessionCount' => $sessionCount,
             'totalSessions' => $totalSessions
         ]);
+    }
+
+    public function getClassByStudent()
+    {
+        $currentAccount = auth()->user();
+
+        if (!$currentAccount || $currentAccount->role !== 1) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $user = User::where('accountId', $currentAccount->id)->first();
+        $student = Student::where('userId', $user->id)->first();
+
+        $classStudents = ClassStudent::where('studentId', $student->id)
+            ->with('class.teacher')
+            ->get();
+
+        return response()->json($classStudents);
     }
 }

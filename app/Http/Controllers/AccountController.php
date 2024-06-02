@@ -30,7 +30,7 @@ class AccountController extends Controller
             'gender' => 'required|string',
             'address' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:Account',
-            'password' => 'required|string|min:8',
+            'password' => 'required|string',
             'departmentId' => 'required|exists:Department,id',
             'role' => 'required|integer|in:1,2,3',
         ]);
@@ -128,29 +128,4 @@ class AccountController extends Controller
         $account->delete();
         return response()->json(null, 204);
     }
-
-    // public function updateProfile(Request $request)
-    // {
-    //     $currentAccount = auth()->user();
-
-    //     $validatedData = $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'current_password' => 'required|string|min:8',
-    //         'new_password' => 'nullable|string|min:8|confirmed',
-    //     ]);
-
-    //     if (!Hash::check($validatedData['current_password'], $currentAccount->password)) {
-    //         return response()->json(['error' => 'Current password is incorrect'], 400);
-    //     }
-
-    //     $currentAccount->name = $validatedData['name'];
-
-    //     if (!empty($validatedData['new_password'])) {
-    //         $currentAccount->password = Hash::make($validatedData['new_password']);
-    //     }
-
-    //     $currentAccount->save();
-
-    //     return response()->json(['message' => 'Profile updated successfully'], 200);
-    // }
 }

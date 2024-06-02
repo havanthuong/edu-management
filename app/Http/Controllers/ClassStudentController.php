@@ -52,7 +52,7 @@ class ClassStudentController extends Controller
     public function studentsInClass($classId)
     {
         $students = ClassStudent::where('classId', $classId)
-            ->with('student')
+            ->with('student.user')
             ->get();
 
         return response()->json($students);

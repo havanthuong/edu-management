@@ -11,7 +11,8 @@ class ClassRegistrationController extends Controller
 {
     public function index()
     {
-        return ClassRegistration::all();
+        $registers = ClassRegistration::with(['student.user', 'class'])->get();
+        return response()->json($registers, 200);
     }
 
     public function store(Request $request)
@@ -40,7 +41,7 @@ class ClassRegistrationController extends Controller
 
     public function show($id)
     {
-        $registration = ClassRegistration::findOrFail($id);
+        $registration = ClassRegistration::with(['student.user', 'class'])->findOrFail($id);
         return response()->json($registration);
     }
 

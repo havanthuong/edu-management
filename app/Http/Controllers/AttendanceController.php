@@ -9,7 +9,8 @@ class AttendanceController extends Controller
 {
     public function index()
     {
-        return Attendance::all();
+        $attendances = Attendance::with(['student.user'])->get();
+        return response()->json($attendances, 200);
     }
 
     public function store(Request $request)
@@ -34,7 +35,7 @@ class AttendanceController extends Controller
 
     public function show($id)
     {
-        $attendance = Attendance::findOrFail($id);
+        $attendance = Attendance::with(['student.user'])->findOrFail($id);
         return response()->json($attendance);
     }
 
@@ -45,7 +46,8 @@ class AttendanceController extends Controller
         ]);
 
         $attendance = Attendance::findOrFail($id);
-        $attendance->update($validatedData);
+        $attendance->status = $validatedData['status'];
+        $attendance->save();
         return response()->json($attendance);
     }
 
