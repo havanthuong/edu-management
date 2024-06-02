@@ -61,4 +61,14 @@ class Account extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function sessions()
+    {
+        return $this->hasMany(AccountSession::class, 'account_id');
+    }
+
+    public function clearSessions()
+    {
+        $this->sessions()->delete();
+    }
 }

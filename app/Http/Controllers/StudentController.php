@@ -12,7 +12,8 @@ class StudentController extends Controller
 {
     public function index()
     {
-        return Student::all();
+        $students = Student::with(['user.account', 'department'])->get();
+        return response()->json($students, 200);
     }
 
     public function store(Request $request)
@@ -28,7 +29,7 @@ class StudentController extends Controller
 
     public function show($id)
     {
-        $student = Student::findOrFail($id);
+        $student = Student::with(['user', 'department'])->findOrFail($id);
         return response()->json($student);
     }
 
@@ -53,7 +54,6 @@ class StudentController extends Controller
 
     public function sessionCount(Request $request, $studentId, $classId)
     {
-        // Kiểm tra sự tồn tại của student và class
         $student = Student::find($studentId);
         $class = ClassModel::find($classId);
 
@@ -61,7 +61,6 @@ class StudentController extends Controller
             return response()->json(['error' => 'Student or Class not found'], 404);
         }
 
-        // Đếm số lần tham gia session với status không phải là -1
         $sessionCount = DB::table('attendance')
             ->join('session', 'attendance.sessionId', '=', 'session.id')
             ->where('attendance.studentId', $studentId)

@@ -11,7 +11,8 @@ class ClassController extends Controller
 {
     public function index()
     {
-        return ClassModel::all();
+        $students = ClassModel::with(['teacher.user', 'department'])->get();
+        return response()->json($students, 200);
     }
 
     public function store(Request $request)
@@ -49,7 +50,7 @@ class ClassController extends Controller
 
     public function show($id)
     {
-        $class = ClassModel::findOrFail($id);
+        $class = ClassModel::with(['teacher.user', 'department'])->findOrFail($id);
         return response()->json($class);
     }
 
@@ -81,5 +82,11 @@ class ClassController extends Controller
             ->get();
 
         return response()->json($unopenedClasses);
+    }
+
+    public function getClassByTeacher($teacherId)
+    {
+        $classes = ClassModel::where('teacherId', $teacherId)->with('teacher.user', 'department')->get();
+        return response()->json($classes, 200);
     }
 }

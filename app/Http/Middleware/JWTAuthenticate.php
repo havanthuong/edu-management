@@ -25,7 +25,6 @@ class JWTAuthenticate
             return response()->json(['error' => 'User not found'], 404);
         }
 
-        // Kiểm tra thời gian tạo session cuối cùng
         $lastSession = AccountSession::where('accountId', $user->id)->orderBy('created_at', 'desc')->first();
 
         if (!$lastSession || Carbon::now()->diffInHours($lastSession->created_at) > 24) {

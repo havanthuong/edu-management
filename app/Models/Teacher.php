@@ -30,4 +30,9 @@ class Teacher extends Model
     {
         return $this->hasMany(ClassModel::class, 'teacherId');
     }
+
+    public function getUsernameAttribute()
+    {
+        return $this->user->account->userName ?? null;
+    }
 }

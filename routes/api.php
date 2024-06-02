@@ -29,7 +29,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::apiResource('sessions', SessionController::class);
     Route::apiResource('students', StudentController::class);
     Route::apiResource('teachers', TeacherController::class);
-    Route::apiResource('users', TeacherController::class);
+    Route::apiResource('users', UserController::class);
 
     // start session
     Route::post('start-session/{sessionId}', [SessionController::class, 'startSession']);
@@ -47,4 +47,6 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('student/{studentId}/class/{classId}/count', [StudentController::class, 'sessionCount']);
     // summary students in session
     Route::get('sessions/{sessionId}/attendance/count', [SessionController::class, 'attendanceCount']);
+    // get classes by teacher
+    Route::get('classes/{teacherId}', [ClassController::class, 'getClassByTeacher']);
 });

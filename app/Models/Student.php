@@ -40,4 +40,9 @@ class Student extends Model
     {
         return $this->hasMany(Attendance::class, 'studentId');
     }
+
+    public function getUsernameAttribute()
+    {
+        return $this->user->account->userName ?? null;
+    }
 }
