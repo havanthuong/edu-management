@@ -41,8 +41,7 @@ class AttendanceController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'studentId' => 'required|exists:Student,id',
-            'sessionId' => 'required|exists:Session,id',
+            'status' => 'required|in:-1,0,1',
         ]);
 
         $attendance = Attendance::findOrFail($id);

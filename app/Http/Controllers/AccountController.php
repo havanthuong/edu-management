@@ -16,6 +16,18 @@ class AccountController extends Controller
         return Account::all();
     }
 
+    // public function store(Request $request)
+    // {
+    //     $validatedData = $request->validate([
+    //         'userName' => 'required|unique:Account',
+    //         'password' => 'required',
+    //         'role' => 'required',
+    //     ]);
+
+    //     $account = Account::create($validatedData);
+    //     return response()->json($account, 201);
+    // }
+
     public function store(Request $request)
     {
 
@@ -27,10 +39,10 @@ class AccountController extends Controller
 
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
+            'email' => 'required|string|email|max:255|unique:User',
             'gender' => 'required|string',
             'address' => 'required|string|max:255',
-            'username' => 'required|string|max:255',
+            'username' => 'required|unique:Account',
             'password' => 'required|string|min:8',
             'departmentId' => 'required|exists:Department,id',
             'role' => 'required|integer|in:1,2,3',
@@ -46,7 +58,7 @@ class AccountController extends Controller
 
         $account = Account::create([
             'userName' => $validatedData['username'],
-            'password' => Hash::make($validatedData['password']),
+            'password' => $validatedData['password'],
             'role' => $validatedData['role'],
         ]);
 
@@ -89,23 +101,38 @@ class AccountController extends Controller
 
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:User',
             'gender' => 'required|string',
             'address' => 'required|string|max:255',
             'departmentId' => 'required|exists:Department,id',
+            'isStudent' => 'required|integer|in:0,1',
         ]);
 
         $account = Account::findOrFail($id);
         $user = User::where('accountId', $account->id)->firstOrFail();
 
-        $user->name = $validatedData['name'];
-        $user->email = $validatedData['email'];
-        $user->gender = $validatedData['gender'];
-        $user->address = $validatedData['address'];
-        $user->departmentId = $validatedData['departmentId'];
-        $user->save();
+        $user->update([
+            'name' => $validatedData['name'],
+            'gender' => $validatedData['gender'],
+            'address' => $validatedData['address'],
+        ]);
 
-        return response()->json(['message' => 'Account update successfully'], 201);
+        if ($validatedData['isStudent'] === 1) {
+            $student = Student::where('userId', $user->id)->first();
+            if ($student) {
+                $student->update(['departmentId' => $validatedData['departmentId']]);
+            } else {
+                return response()->json(['error' => 'Student not found'], 404);
+            }
+        } else {
+            $teacher = Teacher::where('userId', $user->id)->first();
+            if ($teacher) {
+                $teacher->update(['departmentId' => $validatedData['departmentId']]);
+            } else {
+                return response()->json(['error' => 'Teacher not found'], 404);
+            }
+        }
+
+        return response()->json(['message' => 'Account updated successfully'], 200);
     }
 
     public function destroy($id)
@@ -114,4 +141,29 @@ class AccountController extends Controller
         $account->delete();
         return response()->json(null, 204);
     }
+
+    // public function updateProfile(Request $request)
+    // {
+    //     $currentAccount = auth()->user();
+
+    //     $validatedData = $request->validate([
+    //         'name' => 'required|string|max:255',
+    //         'current_password' => 'required|string|min:8',
+    //         'new_password' => 'nullable|string|min:8|confirmed',
+    //     ]);
+
+    //     if (!Hash::check($validatedData['current_password'], $currentAccount->password)) {
+    //         return response()->json(['error' => 'Current password is incorrect'], 400);
+    //     }
+
+    //     $currentAccount->name = $validatedData['name'];
+
+    //     if (!empty($validatedData['new_password'])) {
+    //         $currentAccount->password = Hash::make($validatedData['new_password']);
+    //     }
+
+    //     $currentAccount->save();
+
+    //     return response()->json(['message' => 'Profile updated successfully'], 200);
+    // }
 }

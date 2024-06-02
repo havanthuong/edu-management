@@ -48,5 +48,8 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     // summary students in session
     Route::get('sessions/{sessionId}/attendance/count', [SessionController::class, 'attendanceCount']);
     // get classes by teacher
-    Route::get('classes/{teacherId}', [ClassController::class, 'getClassByTeacher']);
+    Route::get('classes/teacher', [ClassController::class, 'getClassByTeacher']);
+
+    // get sesion by classId
+    Route::get('sessions-class/{classId}', [SessionController::class, 'getSessionByClassId']);
 });

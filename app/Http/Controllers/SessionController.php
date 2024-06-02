@@ -95,4 +95,10 @@ class SessionController extends Controller
 
         return response()->json(['message' => 'Bắt đầu buổi học thành công.'], 201);
     }
+
+    public function getSessionByClassId($classId)
+    {
+        $classes = Session::where('classId', $classId)->get();
+        return response()->json($classes, 200);
+    }
 }

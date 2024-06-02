@@ -84,9 +84,21 @@ class ClassController extends Controller
         return response()->json($unopenedClasses);
     }
 
-    public function getClassByTeacher($teacherId)
+    public function getClassByTeacher()
     {
-        $classes = ClassModel::where('teacherId', $teacherId)->with('teacher.user', 'department')->get();
+        $currentAccount = auth()->user();
+
+        if (!$currentAccount || $currentAccount->role !== 2) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $teacher = Teacher::where('userId', $currentAccount->id)->first();
+
+        if (!$teacher) {
+            return response()->json(['error' => 'Teacher not found'], 404);
+        }
+
+        $classes = ClassModel::where('teacherId', $teacher->id)->with('teacher.user', 'department')->get();
         return response()->json($classes, 200);
     }
 }
