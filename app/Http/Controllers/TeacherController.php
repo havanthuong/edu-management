@@ -12,7 +12,8 @@ class TeacherController extends Controller
 {
     public function index()
     {
-        return Teacher::all();
+        $teachers = Teacher::with(['user', 'department'])->get();
+        return response()->json($teachers, 200);
     }
 
     public function store(Request $request)
@@ -28,7 +29,7 @@ class TeacherController extends Controller
 
     public function show($id)
     {
-        $teacher = Teacher::findOrFail($id);
+        $teacher = Teacher::with(['user', 'department'])->findOrFail($id);
         return response()->json($teacher);
     }
 

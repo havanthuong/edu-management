@@ -18,6 +18,7 @@ class AccountController extends Controller
 
     public function store(Request $request)
     {
+
         $currentAccount = auth()->user();
 
         if (!$currentAccount || $currentAccount->role !== 3) {
@@ -26,10 +27,10 @@ class AccountController extends Controller
 
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:User',
+            'email' => 'required|string|email|max:255',
             'gender' => 'required|string',
             'address' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:Account',
+            'username' => 'required|string|max:255',
             'password' => 'required|string|min:8',
             'departmentId' => 'required|exists:Department,id',
             'role' => 'required|integer|in:1,2,3',
