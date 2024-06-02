@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ClassModel;
+use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -18,7 +19,6 @@ class ClassController extends Controller
 
     public function store(Request $request)
     {
-
         $currentAccount = auth()->user();
         $user = User::where('accountId', $currentAccount->id)->first();
 
@@ -76,11 +76,19 @@ class ClassController extends Controller
 
     public function getUnopenedClassesByDepartment()
     {
-        $student = Auth::user();
+        $currentAccount = auth()->user();
+
+        if (!$currentAccount || $currentAccount->role !== 1) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $user = User::where('accountId', $currentAccount->id)->first();
+        $student = Student::where('userId', $user->id)->first();
         $departmentId = $student->departmentId;
 
         $unopenedClasses = ClassModel::where('status', 'Unopen')
             ->where('departmentId', $departmentId)
+            ->with('teacher.user', 'department')
             ->get();
 
         return response()->json($unopenedClasses);

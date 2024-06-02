@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ClassRegistration;
+use App\Models\Student;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ClassRegistrationController extends Controller
@@ -14,12 +16,25 @@ class ClassRegistrationController extends Controller
 
     public function store(Request $request)
     {
+
+        $currentAccount = auth()->user();
+
+        if (!$currentAccount || $currentAccount->role !== 1) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $user = User::where('accountId', $currentAccount->id)->first();
+        $student = Student::where('userId', $user->id)->first();
+
         $validatedData = $request->validate([
-            'studentId' => 'required|exists:Student,id',
             'classId' => 'required|exists:Class,id',
         ]);
 
-        $registration = ClassRegistration::create($validatedData);
+        $registerData = array_merge($validatedData, [
+            'studentId' => $student->id
+        ]);
+
+        $registration = ClassRegistration::create($registerData);
         return response()->json($registration, 201);
     }
 

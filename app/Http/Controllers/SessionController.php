@@ -23,7 +23,11 @@ class SessionController extends Controller
             'sessionLocation' => 'required',
         ]);
 
-        $session = Session::create($validatedData);
+        $sessionData = array_merge($validatedData, [
+            'status' => 0
+        ]);
+
+        $session = Session::create($sessionData);
         return response()->json($session, 201);
     }
 
@@ -64,13 +68,18 @@ class SessionController extends Controller
 
     public function startSession($sessionId)
     {
-
         $session = Session::findOrFail($sessionId);
 
         if (!$session) {
             return response()->json(['error' => 'Session not found'], 404);
         }
 
+        if ($session->status === 1) {
+            return response()->json(['error' => "Can't start thí session"], 400);
+        }
+
+        $session->status = 1;
+        $session->save();
 
         $classId = $session->classId;
         $students = DB::table('classstudent')

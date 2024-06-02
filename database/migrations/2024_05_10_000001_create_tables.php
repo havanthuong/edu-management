@@ -109,6 +109,7 @@ return new class extends Migration
             $table->unsignedBigInteger('classId');
             $table->dateTime('sessionDate');
             $table->string('sessionLocation');
+            $table->integer('status');
             $table->timestamps();
 
             $table->foreign('classId')->references('id')->on('Class')->onDelete('cascade');
