@@ -107,8 +107,8 @@ return new class extends Migration
         Schema::create('Session', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('classId');
-            $table->dateTime('sesionDate');
-            $table->string('sesionLocation');
+            $table->dateTime('sessionDate');
+            $table->string('sessionLocation');
             $table->timestamps();
 
             $table->foreign('classId')->references('id')->on('Class')->onDelete('cascade');

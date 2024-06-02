@@ -9,7 +9,6 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Account extends Authenticatable implements JWTSubject
 {
-
     use Notifiable;
 
     protected $table = 'Account';

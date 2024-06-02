@@ -13,8 +13,8 @@ class Session extends Model
 
     protected $fillable = [
         'classId',
-        'sesionDate',
-        'sesionLocation',
+        'sessionDate',
+        'sessionLocation',
     ];
 
     public function class()

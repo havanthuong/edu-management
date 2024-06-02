@@ -23,12 +23,6 @@ class SessionController extends Controller
             'sessionLocation' => 'required',
         ]);
 
-        $class = ClassModel::findOrFail($validatedData['classId']);
-
-        if ($class->status !== 'đã duyệt') {
-            return response()->json(['error' => 'Không thể tạo session cho lớp học chưa được duyệt.'], 403);
-        }
-
         $session = Session::create($validatedData);
         return response()->json($session, 201);
     }

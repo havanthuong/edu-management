@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ClassModel;
 use App\Models\Teacher;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,12 +20,13 @@ class ClassController extends Controller
     {
 
         $currentAccount = auth()->user();
+        $user = User::where('accountId', $currentAccount->id)->first();
 
         if (!$currentAccount || $currentAccount->role !== 2) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
-        $teacher = Teacher::where('userId', $currentAccount->id)->first();
+        $teacher = Teacher::where('userId', $user->id)->first();
 
         if (!$teacher) {
             return response()->json(['error' => 'Teacher not found'], 404);
@@ -41,7 +43,7 @@ class ClassController extends Controller
 
         $classData = array_merge($validatedData, [
             'teacherId' => $teacher->id,
-            'status' => 'Unpprove'
+            'status' => 'Unapprove'
         ]);
 
         $class = ClassModel::create($classData);
@@ -57,7 +59,7 @@ class ClassController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'status' => 'required',
+            'status' => 'required', // Unapprove, Unopen, Open, Finish
         ]);
 
         $class = ClassModel::findOrFail($id);
@@ -87,12 +89,13 @@ class ClassController extends Controller
     public function getClassByTeacher()
     {
         $currentAccount = auth()->user();
+        $user = User::where('accountId', $currentAccount->id)->first();
 
         if (!$currentAccount || $currentAccount->role !== 2) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
-        $teacher = Teacher::where('userId', $currentAccount->id)->first();
+        $teacher = Teacher::where('userId', $user->id)->first();
 
         if (!$teacher) {
             return response()->json(['error' => 'Teacher not found'], 404);

@@ -16,21 +16,8 @@ class AccountController extends Controller
         return Account::all();
     }
 
-    // public function store(Request $request)
-    // {
-    //     $validatedData = $request->validate([
-    //         'userName' => 'required|unique:Account',
-    //         'password' => 'required',
-    //         'role' => 'required',
-    //     ]);
-
-    //     $account = Account::create($validatedData);
-    //     return response()->json($account, 201);
-    // }
-
     public function store(Request $request)
     {
-
         $currentAccount = auth()->user();
 
         if (!$currentAccount || $currentAccount->role !== 3) {
@@ -39,10 +26,10 @@ class AccountController extends Controller
 
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:User',
+            'email' => 'required|string|email|max:255',
             'gender' => 'required|string',
             'address' => 'required|string|max:255',
-            'username' => 'required|unique:Account',
+            'username' => 'required|string|max:255|unique:Account',
             'password' => 'required|string|min:8',
             'departmentId' => 'required|exists:Department,id',
             'role' => 'required|integer|in:1,2,3',

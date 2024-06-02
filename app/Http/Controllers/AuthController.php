@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
 use App\Models\AccountSession;
 use App\Models\Department;
 use App\Models\Student;
